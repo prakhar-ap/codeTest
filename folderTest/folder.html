@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <meta http-equiv="X-A-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="folder.css">
+        <title>Keyframes & Animations</title>
+        <script>
+            var folderIndex = -1;
+            function getFolder() {
+                folderIndex = folderIndex + 1;
+                var tab = document.createElement("div"); tab.className = "tab";
+                var folder = document.createElement("div"); folder.className = "folder"; folder.id = folderIndex;
+                var nameSpan = document.createElement("div");
+                var folderName = document.getElementById("name").value;
+                var name = document.createTextNode(folderName);
+                
+                nameSpan.className="folderText";
+                nameSpan.append(name);
+                folder.append(nameSpan);
+                folder.onclick = function() {
+                    var template = document.querySelector('template');
+                    const node = document.importNode(template.content, true);
+                    node.getElementById("childName").innerHTML = folderName;
+                    node.getElementById("childs").id = "childs_" + folder.id;
+                    node.getElementById("addNew").onclick = function() {
+                        displayPopUp('childs_'+ folder.id);
+                    }
+                    node.getElementById("addNew").id = "addNew_" + folder.id;
+                    document.getElementById("MainContainer").appendChild(node);
+                    this.style.pointerEvents = 'none';
+                }
+                tab.append(folder);
+                return tab;
+            }
+
+            function add() {
+                if (isFolderNameValid(document.getElementById("name").value)) {
+                    var parent = localStorage.getItem("currentParent");
+                    var current = document.getElementById(parent);
+                    current.appendChild(getFolder());
+                    document.getElementById("addNewFolderPopup").style.display = "none";
+                    var container = document.getElementById("MainContainer");
+                    container.className = "box";
+                    container.style.pointerEvents = 'auto';
+                } else {
+                    alert('Please enter then atleast 3 characters or atmost 30 characters to proceed.')
+                }
+            }
+
+            function isFolderNameValid(name) {
+                return name.length >= 3 && name.length <= 30;
+            }
+
+            function displayPopUp(parent) {
+                var x = document.getElementById("addNewFolderPopup");
+                var container = document.getElementById("MainContainer");
+                if (x.style.display === "none") {
+                    document.getElementById("name").value = "";
+                    x.style.display = "block";
+                    localStorage.setItem("currentParent", parent);
+                    container.className = "box opac";
+                    // To disable:    
+                    container.style.pointerEvents = 'none';
+                } else {
+                    x.style.display = "none";
+                    container.className="box";
+                    // To re-enable:
+                    container.style.pointerEvents = 'auto';
+                }
+            }
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    displayPopUp();
+                }
+            })
+        </script>
+    </head>
+    <body>
+        <div class="box" id="MainContainer">
+            <div class="header">Folders</div>
+            <!-- FOLDER CONTAINER -->
+            <div class="folderContainer">
+                <div class="folders" id="folders"></div>
+                <div class="addNew" onclick="displayPopUp('folders')">
+                    <div class="addButton">+</div>
+                </div>
+            </div>
+            <!--  -->
+        </div>
+        <!-- POPUP START -->
+        <div class="popup">
+            <div id="addNewFolderPopup" style="display: none;">
+                <div id="closeModal" class="Close" onclick="displayPopUp()">&times;</div>
+                <div class="folderName">
+                    <input type="text" placeholder="folder test" value="" id="name"/>
+                </div>
+                <button class="createButton" onclick="add()">Create Folder</button>
+                <p class="helperText">
+                    <img src="warning.jpg" width="10px" height="10px" />
+                    <span>Folder name should be less then 30 characters</span>
+                </p>
+            </div>
+        </div>
+        <!-- POPUP END -->
+        <!-- CHILD TEMP START -->
+        <template id="childView">
+            <div class="childFolderView">
+                <span class="parentName" id="childName"></span>
+                <hr />
+                <div class="folderContainer">
+                    <div class="folders" id="childs"></div>
+                    <div class="addNew" id="addNew" title="Add New Folder">
+                        <div class="addButton">+</div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <!-- CHILD TEMP END -->
+    </body>
+</html>

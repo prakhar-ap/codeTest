@@ -1,0 +1,77 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background: #124;
+    color: whitesmoke;
+    text-align: center;
+    margin: 20px;
+}
+
+.showcase {
+    height: 200px;
+}
+
+.showcase h1 {  
+    position: relative;
+    animation-name: welcome;
+    animation-duration: 3s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes welcome {
+    0% {top: -100px;}
+    100% {top: 150px;}
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    position: relative;
+    animation: para;
+    animation-fill-mode: forwards;
+    animation-duration: 3s;
+}
+
+@keyframes para {
+    0% {left: -1000px;}
+    100% {left: 0px;}
+}
+
+.btn {
+    display: inline-block;
+    color: whitesmoke;
+    text-decoration: none;
+    padding: 1rem 2rem;
+    position: relative;
+    border: 1px solid white;
+    margin: 20px;
+    opacity: 0;
+    animation: btn;
+    animation-duration: 3s;
+    animation-delay: 3s;
+    animation-fill-mode: forwards;
+    transition-property: box-shadow;
+    transition-duration: 1s;
+    transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* .btn:hover span { display: none;} */
+/* .btn:hover:after {content:"Hovered!"} */
+.btn:hover {
+    box-shadow: 0px 1px 6px 2px #ffffff;
+}
+
+@keyframes btn {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+}
+
+
+
+
+
+
